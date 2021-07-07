@@ -1,19 +1,20 @@
 # Напишите класс метакласс Meta,
 # который всем классам для кого он будет метаклассом устанавливает порядковый номер.
 
-NUMBER_OF_CLASSES = 0
-
-
 class Meta(type):
+
     # мета класс, который всем классам для которого он будет метаклассом
     # устанавливает порядковый номер
+    children_number = 0
 
     def __new__(meta_class, class_name, parents, attributes):
-        global NUMBER_OF_CLASSES
-        attributes['class_number'] = NUMBER_OF_CLASSES
-        NUMBER_OF_CLASSES += 1
+        attributes['class_number'] = Meta.children_number
+        Meta.children_number += 1
         print(f'Meta __new__ called with {attributes}')
         return type.__new__(meta_class, class_name, parents, attributes)
+
+
+Meta.children_number = 0
 
 
 class Cls1(metaclass=Meta):
