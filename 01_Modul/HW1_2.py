@@ -98,25 +98,40 @@ class DictToJSONSerialization(SerializationInterface):
     # класс для сериализации словаря в JSON:
     # реализуем ситуацию когда ключ словаря - число
     def serialize(self):
-        # создаем список позиций словаря, где ключом является число
-        numbers_position_list = []
+        # создаем список позиций словаря, где ключом является не-строка
+        non_str_position_dict = {}
         counter = 0
         for key in self.data:
-            if isinstance(key, int):
-                numbers_position_list.append(counter)
+            if isinstance(key, bool):
+                non_str_position_dict[counter] = "bool"
+            elif isinstance(key, float):
+                non_str_position_dict[counter] = "float"
+            elif isinstance(key, int):
+                non_str_position_dict[counter] = "int"
             counter += 1
         with open(JSON_FILE_NAME, 'w') as f:
-            json.dump([self.data, numbers_position_list], f)
+            json.dump([self.data, non_str_position_dict], f)
 
     def deserialize(self):
         self.data = dict()
+        non_str_position_dict = {}
         with open(JSON_FILE_NAME, 'r') as f:
-            container, numbers_position_list = json.load(f)
-            # преобразовываем ключи, что д.б. числами:
+            container, non_str_position_dict = json.load(f)
+            # преобразовываем ключи, что д.б. не-строками:
             counter = 0
             for key, value in container.items():
-                if counter in numbers_position_list:
-                    self.data[int(key)] = value
+                if str(counter) in non_str_position_dict.keys():
+                    # если один из ключей не строка
+                    if non_str_position_dict[str(counter)] == 'int':
+                        self.data[int(key)] = value
+                    elif non_str_position_dict[str(counter)] == 'float':
+                        self.data[float(key)] = value
+                    elif non_str_position_dict[str(counter)] == 'bool':
+                        print(f'I have bool-key {key} {bool(key)}')
+                        if key.lower() == 'true':
+                            self.data[True] = value
+                        elif key.lower() == 'false':
+                            self.data[False] = value
                 else:
                     self.data[key] = value
                 counter += 1
@@ -151,8 +166,8 @@ def define_serialization_type(container):
 
 if __name__ == '__main__':
     # список контейнеров для теста
-    containers = [{1, 2}, [1, 2, 3, 4], {
-        "one": 1, "two": "2", 3: 3}, (1, 2, 3, 4, 5)]
+    containers = [(1, 2, 3, 4, 5), {1, 2}, [1, 2, 3, 4], {
+        "one": 1, 2.0: "2", False: 3, True: 225.56, 5: None}]
     # сами тесты
     for FILE_FORMAT in ('json', 'bin'):
         for container in containers:
@@ -161,5 +176,5 @@ if __name__ == '__main__':
             print(f'Контейнер до сериализации {container}')
             a_object.serialize()
             a_object.deserialize()
-            assert container == a_object.data
             print(f'Контейнер после десериализации {a_object.data}')
+            assert container == a_object.data

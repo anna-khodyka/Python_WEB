@@ -10,7 +10,6 @@ class Meta(type):
     def __new__(meta_class, class_name, parents, attributes):
         attributes['class_number'] = Meta.children_number
         Meta.children_number += 1
-        print(f'Meta __new__ called with {attributes}')
         return type.__new__(meta_class, class_name, parents, attributes)
 
 
