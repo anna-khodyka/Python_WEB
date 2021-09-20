@@ -5,13 +5,12 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-_CONNECTION_STRING = 'sqlite:///hw906.db'
+_CONNECTION_STRING = 'sqlite:///hw907.db'
 
 engine = create_engine(_CONNECTION_STRING, echo=True)
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 Base = declarative_base()
-# metadata = Base.metadata
 
 
 class Record(Base):
@@ -56,8 +55,8 @@ class Note(Base):
     id = Column(Integer, primary_key=True)
     note_tags = Column(String)
     note_text = Column(String)
+    created_at = Column(Date)
 
 
-metadata = Base.metadata
-metadata.bind = engine
-metadata.create_all(engine)
+Base.metadata.bind = engine
+Base.metadata.create_all(engine)
