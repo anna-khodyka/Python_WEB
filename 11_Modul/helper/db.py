@@ -29,7 +29,7 @@ def close_db(e=None):
     """Closes db  connection"""
     client = g.pop('model', None)
     if client is not None:
-        client.close()
+        client.session.close()
 
 
 @click.command('check-db')
