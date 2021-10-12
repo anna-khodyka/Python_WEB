@@ -4,14 +4,29 @@
 
 {% block content %}
 <div class="features">
-    <a href="{{ url_for('contact.show') }}" class="features-button">Add a contact</a>
-    <a href="{{ url_for('contact.show') }}" class="features-button">Find</a>
+    <a href="{{ url_for('contact.show') }}" class="features-button">All contacts</a>
+    <a href="{{ url_for('contact.add') }}" class="features-button">Add a contact</a>
+    <!-- Сортировать -->
+    <form action="{{ url_for('contact.sort') }}" method="post">
+        <select id="sort_type" name="sort_type">
+            <option value="1">by Name A-Z</option>
+            <option value="2">by Name Z-A</option>
+            <option value="3" selected>by ID A-Z</option>
+            <option value="4">by ID Z-A</option>
+        </select>      
+        <input type="submit" value="Sort">
+    </form>
+    <!-- Найти -->
+    <form action="{{ url_for('contact.find') }}" method="post">
+        <input name="keyword" id="keyword" value="{{ request.form['keyword'] }}" required>
+        <input type="submit" value="Find">
+    </form>
 </div>
 
 <div class="table-wrapper">
     <table class="table">
         <thead>
-            <tr>
+            <tr class="table-row">
                 <th>ID</th>
                 <th>Name</th>
                 <th>Phone</th>
@@ -37,11 +52,11 @@
 
                 <!--СТолбец кнопочек-->
                 <td>
-                    <form action="{{ url_for('contact.show', record_id=record.id) }}" method="post">
+                    <form action="{{ url_for('contact.edit', record_id=record.id) }}" method="get">
                         <button class="btn btn-danger">Edit</button>
                     </form>
 
-                    <form action="{{ url_for('contact.show', record_id=record.id) }}" method="post">
+                    <form action="{{ url_for('contact.delete', record_id=record.id) }}" method="post">
                         <button class="btn btn-success">Delete</button>
                     </form>
 
@@ -52,5 +67,4 @@
     </table>
 </div>
 
-    {{result}}
 {% endblock %}

@@ -67,10 +67,10 @@ p {
 .active-navigation {
   background-color: white;
   font-weight: 800;
+  border-radius: 15px 15px 0px 0px;
 }
 
 .table-wrapper table {
-  /* margin: 0 auto; */
   width: 100%;
 }
 
@@ -81,7 +81,6 @@ p {
   height: 65px;
   padding-bottom: 15px;
   padding-top: 15px;
-  /* margin-bottom: 20px; */
 }
 
 .features-button {

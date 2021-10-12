@@ -14,7 +14,7 @@ class AddressBook():
 
         record = Record(name=name, birthday=birthday,
                         address=address, email=email, tags=tags)
-
+        # добавить проверку на phones <> None
         for phone in phones:
             record.phones.append(Phone(phone_value=phone))
 
@@ -27,6 +27,18 @@ class AddressBook():
         # удаляет record с указанным id
         record = self.session.query(Record).filter_by(id=id).one()
         self.session.delete(record)
+        self.session.commit()
+        return str(record)
+
+    def edit_record(self, edited_id, updated_name, updated_birthday, updated_address, updated_email, updated_tags, updated_phone):
+        record = self.session.query(Record).filter_by(id=edited_id).one()
+        record.name = updated_name
+        record.phones = []
+        record.phones.append(Phone(phone_value=updated_phone))
+        record.birthday = updated_birthday
+        record.address = updated_address
+        record.email = updated_email
+        record.tags = updated_tags
         self.session.commit()
         return str(record)
 
@@ -70,6 +82,9 @@ class AddressBook():
     def return_all_records(self):
         # возвращает список объектов Record
         return self.session.query(Record).all()
+
+    def find_record(self, edited_id):
+        return self.session.query(Record).filter_by(id=edited_id).one()
 
     def find_value(self, keyword):
         # возвращает список объектов Record
@@ -144,6 +159,21 @@ class AddressBook():
             days_left = (bday-today_d)
         return days_left.days
 
+    def sort(self, sort_type):
+        if sort_type == "1":
+            records_list = self.session.query(Record).order_by(
+                Record.name.asc()).all()
+        elif sort_type == "2":
+            records_list = self.session.query(Record).order_by(
+                Record.name.desc()).all()
+        elif sort_type == "3":
+            records_list = self.session.query(Record).order_by(
+                Record.id.asc()).all()
+        elif sort_type == "4":
+            records_list = self.session.query(Record).order_by(
+                Record.id.desc()).all()
+        return records_list
+
     def validate_phone(self, phone):
         return re.fullmatch('[+]?[0-9]{3,12}', phone)
 
@@ -162,6 +192,13 @@ class AddressBook():
     def validate_birthday(self, birthday):
         try:
             datetime.strptime(birthday, "%d.%m.%Y").date()
+            return True
+        except:
+            return False
+
+    def validate_birthday2(self, birthday):
+        try:
+            datetime.strptime(birthday, "%Y-%m-%d").date()
             return True
         except:
             return False

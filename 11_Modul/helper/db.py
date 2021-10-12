@@ -11,15 +11,6 @@ def check_db():
 
 def get_db():
     """Get database """
-    # db_name = 'hw907.db'
-    # db_url = _CONNECTION_STRING
-    # if 'mongo_client' not in g:
-    #     movies_mongo_client = pymongo.MongoClient(db_url)
-    #     g.mongo_client = movies_mongo_client
-
-    # if 'db' not in g:
-    #     my_db: Database = getattr(g.mongo_client, db_name)
-    #     g.db = my_db
     if "model" not in g:
         g.model = Model()
     return g.model
