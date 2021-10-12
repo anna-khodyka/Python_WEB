@@ -12,9 +12,11 @@ def show():
     number = 5
     model = get_db()
     records_list = model.book.return_all_records()
-    iter = model.book.iterator(records_list, number)
-    result = ""
-    for i in iter:
-        result += i
-    result += "The end of the contacts book"
-    return result
+    # iter = model.book.iterator(records_list, number)
+    # result = ""
+    # for i in iter:
+    #     result += i
+    # result += "The end of the contacts book"
+    return render_template('contact/index.html', results=records_list)
+    # return render_template('contact/index.html', results=result)
+    # return result

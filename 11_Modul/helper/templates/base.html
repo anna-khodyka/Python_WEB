@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+</head>
+<title>{% block title %}{% endblock %} Helper APP</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<nav class="container">
+  <h1 class="container-header">Helper APP</h1>
+  <ul class="navigation">
+    <li class="active-navigation">Contacts</li>
+    <li>Notes</li>
+    <li>Cleaner</li>
+  </ul>
+</nav>
+
+<section class="container main-content">
+
+  <header>
+    {% block header %}{% endblock %}
+  </header>
+  
+  {% for message in get_flashed_messages() %}
+  <div class="flash">{{ message }}</div>
+  {% endfor %}
+
+  {% block content %}{% endblock %}
+</section>

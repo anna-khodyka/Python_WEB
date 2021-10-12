@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block header %}
+{% endblock %}
+
+{% block content %}
+<div class="features">
+    <a href="{{ url_for('contact.show') }}" class="features-button">Add a contact</a>
+    <a href="{{ url_for('contact.show') }}" class="features-button">Find</a>
+</div>
+
+<div class="table-wrapper">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Birthday</th>
+                <th>Address</th>
+                <th>Email</th>
+                <th>Tags</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in results %}
+            <tr class="">
+                <td>{{record.id}}</td>
+                <td>{{record.name}}</td>
+                {% for phone in record.phones %}
+                <td>{{phone.phone_value}}</td>
+                {% endfor %}
+                <td>{{record.birthday}}</td>
+                <td>{{record.address}}</td>
+                <td>{{record.email}}</td>
+                <td>{{record.tags}}</td>
+
+                <!--СТолбец кнопочек-->
+                <td>
+                    <form action="{{ url_for('contact.show', record_id=record.id) }}" method="post">
+                        <button class="btn btn-danger">Edit</button>
+                    </form>
+
+                    <form action="{{ url_for('contact.show', record_id=record.id) }}" method="post">
+                        <button class="btn btn-success">Delete</button>
+                    </form>
+
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+    {{result}}
+{% endblock %}
