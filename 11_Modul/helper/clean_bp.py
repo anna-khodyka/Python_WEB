@@ -12,20 +12,23 @@ clean_bp = Blueprint('clean', __name__, url_prefix='/clean')
 def clean():
 
     error = None
+    message = ""
+
     if request.method == 'POST':
         try:
             # сделать форму где поле имеет имя 'path'
             user_input = request.form['path']
             print(user_input)
             path = pathlib.Path(user_input)
-            CleanFolder().print_recursive(path, user_input)
-            CleanFolder().delete_dir(user_input)
+            CleanFolder().parse_folder(path)
+
         except Exception as er:
-            error = er
+            error = "Указанная папка не существует"
 
         if error is not None:
             flash(error)
-
-        return redirect(url_for('contact.index')) 
+        else:
+            message = "Your folder is parsed sucessfully"
+        return render_template('clean/cleaner_result.html', message=message)
 
     return render_template('clean/cleaner.html')

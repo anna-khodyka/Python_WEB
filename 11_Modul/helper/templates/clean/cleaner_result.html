@@ -12,15 +12,7 @@
 
 {% block content %}
 <div class="table-wrapper">
-    <form method="post">
-        <label for="path"></label>
-        <input name="path" id="path" value="{{ request.form['path'] }}" required>
-        <input type="submit" value="Clean">
-    </form>
+    <div>{{message}}</div>
 </div>
-
-{% if message %}
-<div>{{ message }}</div>
-{% endif %}
 
 {% endblock %}
