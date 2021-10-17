@@ -1,23 +1,31 @@
 {% extends 'base.html' %}
 {% block header %}
+<nav>
+    <h1 class="container-header">Helper APP</h1>
+    <ul class="navigation">
+        <li class="active-navigation">Contacts</li>
+        <li>Notes</li>
+        <li>Cleaner</li>
+    </ul>
+</nav>
 {% endblock %}
 
 {% block content %}
-
-<form method="post">
-    <label for="name">Name</label>
-    <input name="name" id="name" value="{{ request.form['name'] or record.name}}" required>
-    <label for="phone">Phone</label>
-    <input name="phone" id="phone" value="{{ request.form['phone'] or record.phones[0].phone_value}}" size="12">
-    <label for="birthday">Birthday</label>
-    <input name="birthday" id="birthday" value="{{ request.form['birthday'] or record.birthday}}" size="7">
-    <label for="address">Address</label>
-    <input name="address" id="address" value="{{ request.form['address'] or record.address}}">
-    <label for="email">Email</label>
-    <input name="email" id="email" value="{{ request.form['email'] or record.email}}" size="10">
-    <label for="tags">Tags</label>
-    <input name="tags" id="tags" value="{{ request.form['tags'] or record.tags}}" size="10">
-    <input type="submit" value="Save">
-</form>
-
+<div class="table-wrapper">
+    <form method="post">
+        <label for="name">Name</label>
+        <input name="name" id="name" value="{{ request.form['name'] or record.name}}" required>
+        <label for="phone">Phone</label>
+        <input name="phone" id="phone" value="{{ request.form['phone'] or record.phones[0].phone_value}}" size="12">
+        <label for="birthday">Birthday</label>
+        <input name="birthday" id="birthday" value="{{ request.form['birthday'] or record.birthday}}" size="7">
+        <label for="address">Address</label>
+        <input name="address" id="address" value="{{ request.form['address'] or record.address}}">
+        <label for="email">Email</label>
+        <input name="email" id="email" value="{{ request.form['email'] or record.email}}" size="10">
+        <label for="tags">Tags</label>
+        <input name="tags" id="tags" value="{{ request.form['tags'] or record.tags}}" size="10">
+        <input type="submit" value="Save">
+    </form>
+</div>
 {% endblock %}

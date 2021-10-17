@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="4" time="0.222" timestamp="2021-10-15T12:47:22.781386" hostname="WIN-O2VJ8K1DU8C"><testcase classname="tests.test_multiplication" name="test_multiplication_11[1-11]" time="0.005" /><testcase classname="tests.test_multiplication" name="test_multiplication_11[2-22]" time="0.009" /><testcase classname="tests.test_multiplication" name="test_multiplication_11[3-35]" time="0.003"><failure message="assert 33 == 35&#10;  +33&#10;  -35">num = 3, output = 35
+
+    @pytest.mark.parametrize("num, output", [(1, 11), (2, 22), (3, 35), (4, 44)])
+    def test_multiplication_11(num, output):
+&gt;       assert 11*num == output
+E       assert 33 == 35
+E         +33
+E         -35
+
+tests\test_multiplication.py:6: AssertionError</failure></testcase><testcase classname="tests.test_multiplication" name="test_multiplication_11[4-44]" time="0.005" /></testsuite></testsuites>

@@ -3,6 +3,7 @@ import os
 from flask import Flask
 from . import db
 from . import contact_bp
+from . import clean_bp
 
 
 def create_app(test_config=None):
@@ -28,12 +29,13 @@ def create_app(test_config=None):
 
     db.init_app(app)
     app.register_blueprint(contact_bp.contact_bp)
-    # app.add_url_rule('/', endpoint='index')
+    app.register_blueprint(clean_bp.clean_bp)
+    app.add_url_rule('/', endpoint='index')
 
     return app
 
 # инструкция по запуску приложения
 
 # $env:FLASK_APP = "helper"
-# $env:FLASK_ENV = "development"
+# $env:FLASK_ENV="development"
 # flask run

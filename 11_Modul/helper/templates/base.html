@@ -5,16 +5,8 @@
 <title>{% block title %}{% endblock %} Helper APP</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
-<nav class="container">
-  <h1 class="container-header">Helper APP</h1>
-  <ul class="navigation">
-    <li class="active-navigation">Contacts</li>
-    <li>Notes</li>
-    <li>Cleaner</li>
-  </ul>
-</nav>
 
-<section class="container main-content">
+<section class="container">
 
   <header>
     {% block header %}{% endblock %}

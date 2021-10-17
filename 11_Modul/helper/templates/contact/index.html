@@ -1,12 +1,20 @@
 {% extends 'base.html' %}
 {% block header %}
+<nav >
+    <h1 class="container-header">Helper APP</h1>
+    <ul class="navigation">
+        <li class="active-navigation"><a href="{{ url_for('contact.index') }}">Contacts</a></li>
+        <li><a href="{{ url_for('contact.index') }}">Notes</a></li>
+        <li><a href="{{ url_for('clean.clean') }}">Cleaner</a></li>
+    </ul>
+</nav>
 {% endblock %}
 
 {% block content %}
 <div class="features">
-    <a href="{{ url_for('contact.show') }}" class="features-button">All contacts</a>
+    <a href="{{ url_for('contact.index') }}" class="features-button">All contacts</a>
     <a href="{{ url_for('contact.add') }}" class="features-button">Add a contact</a>
-    <!-- Сортировать -->
+    <!-- Сортировка -->
     <form action="{{ url_for('contact.sort') }}" method="post">
         <select id="sort_type" name="sort_type">
             <option value="1">by Name A-Z</option>
@@ -16,7 +24,7 @@
         </select>      
         <input type="submit" value="Sort">
     </form>
-    <!-- Найти -->
+    <!-- Поиск -->
     <form action="{{ url_for('contact.find') }}" method="post">
         <input name="keyword" id="keyword" value="{{ request.form['keyword'] }}" required>
         <input type="submit" value="Find">

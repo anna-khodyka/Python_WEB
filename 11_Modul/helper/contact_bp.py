@@ -4,7 +4,7 @@ from werkzeug.exceptions import abort
 
 from .db import get_db
 
-contact_bp = Blueprint('contact', __name__, url_prefix='/contact')
+contact_bp = Blueprint('contact', __name__)
 
 
 class InvalidRequestException(Exception):
@@ -13,8 +13,8 @@ class InvalidRequestException(Exception):
         self.msg = msg
 
 
-@contact_bp.route('/show')
-def show():
+@contact_bp.route('/')
+def index():
     model = get_db()
     records_list = model.book.return_all_records()
     return render_template('contact/index.html', results=records_list)
@@ -80,7 +80,7 @@ def add():
         else:
             model.book.add_record(
                 name=name, birthday=birthday, address=address, email=email, tags=tags, phones=phones)
-            return redirect(url_for('contact.show'))
+            return redirect(url_for('contact.index'))
 
     return render_template('contact/add.html')
 
@@ -92,7 +92,7 @@ def delete(record_id):
         model.book.remove_record(record_id)
     except InvalidRequestException as e:
         abort(404, e.msg)
-    return redirect(url_for('contact.show'))
+    return redirect(url_for('contact.index'))
 
 
 @contact_bp.route('/<record_id>/edit', methods=('GET', 'POST'))
@@ -143,6 +143,6 @@ def edit(record_id):
         else:
             model.book.edit_record(
                 record_id, name, birthday, address, email, tags, phone)
-            return redirect(url_for('contact.show'))
+            return redirect(url_for('contact.index'))
 
     return render_template('contact/edit.html', record=record)

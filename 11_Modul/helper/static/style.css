@@ -30,9 +30,7 @@ p {
   margin: 0;
   padding: 0;
 }
-.main-content {
-  background-color: white;
-}
+
 .container {
   width: 1200px;
   margin-left: auto;
@@ -70,6 +68,11 @@ p {
   border-radius: 15px 15px 0px 0px;
 }
 
+.table-wrapper {
+  background-color: white;
+  padding: 10px;
+}
+
 .table-wrapper table {
   width: 100%;
 }
@@ -81,6 +84,7 @@ p {
   height: 65px;
   padding-bottom: 15px;
   padding-top: 15px;
+  background-color: white;
 }
 
 .features-button {
@@ -91,8 +95,8 @@ p {
   padding: 10px;
   border-radius: 4px;
   text-align: center;
-  background-color: #f5f4fa;
   border: 1px solid black;
+  background-color: #f5f4fa;
 }
 
 .features-button:hover,
