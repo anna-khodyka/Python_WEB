@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block header %}
+<nav>
+    <h1 class="container-header">Helper APP</h1>
+    <ul class="navigation">
+        <li><a href="{{ url_for('contact.index') }}">Contacts</a></li>
+        <li class="active-navigation"><a href="{{ url_for('notes.index') }}">Notes</a></li>
+        <li><a href="{{ url_for('clean.clean') }}">Cleaner</a></li>
+    </ul>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="table-wrapper">
+    <form method="post">
+
+        <label for="note_tags">Note's tag</label>
+        <input name="note_tags" id="note_tags" value="{{ request.form['note_tags'] or note.note_tags}}">
+
+        <label for="note_text">Note</label>
+        <textarea name="note_text" id="note_text" rows="10" cols="45"
+            required>{{request.form['note_text'] or note.note_text}}</textarea>
+
+        <label for="created_at">Created at</label>
+        <input name="created_at" id="created_at" value="{{ request.form['created_at'] or note.created_at}}" size="7">
+
+        <input type="submit" value="Save">
+    </form>
+</div>
+{% endblock %}

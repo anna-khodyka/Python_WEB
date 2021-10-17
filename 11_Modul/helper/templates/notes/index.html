@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block header %}
+<nav>
+    <h1 class="container-header">Helper APP</h1>
+    <ul class="navigation">
+        <li><a href="{{ url_for('contact.index') }}">Contacts</a></li>
+        <li class="active-navigation"><a href="{{ url_for('notes.index') }}">Notes</a></li>
+        <li><a href="{{ url_for('clean.clean') }}">Cleaner</a></li>
+    </ul>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="features">
+    <a href="{{ url_for('notes.index') }}" class="features-button">All notes</a>
+    <a href="{{ url_for('notes.add') }}" class="features-button">Add a note</a>
+    <!-- Сортировка -->
+    <form action="{{ url_for('notes.sort') }}" method="post">
+        <select id="sort_type" name="sort_type" class="input">
+            <option value="1">by Name A-Z</option>
+            <option value="2">by Name Z-A</option>
+            <option value="3" selected>by ID A-Z</option>
+            <option value="4">by ID Z-A</option>
+        </select>
+        <input type="submit" value="Sort" class="btn">
+    </form>
+    <!-- Поиск -->
+    <form action="{{ url_for('notes.find') }}" method="post">
+        <input name="keyword" id="keyword" value="{{ request.form['keyword'] }}" class="input" required>
+        <input type="submit" value="Find" class="btn">
+    </form>
+</div>
+
+<div class="table-wrapper">
+    <table class="table">
+        <thead>
+            <tr class="table-row">
+                <th>ID</th>
+                <th>Note's tag</th>
+                <th>Note</th>
+                <th>Created at</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for note in results %}
+            <tr class="">
+                <td>{{note.id}}</td>
+                <td>{{note.note_tags}}</td>
+                <td>{{note.note_text}}</td>
+                <td>{{note.created_at}}</td>
+
+                <!--Столбец кнопочек-->
+                <td>
+                    <form action="{{ url_for('notes.edit', note_id=note.id) }}" method="get">
+                        <button class="btn btn-danger">Edit</button>
+                    </form>
+
+                    <form action="{{ url_for('notes.delete', note_id=note.id) }}" method="post">
+                        <button class="btn btn-success">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

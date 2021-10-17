@@ -9,37 +9,38 @@ class NotesBook():
     def all_notes(self):
         return self.session.query(Note).all()
 
-    def add_note(self, text, hashtag):
+    def add_note(self, text, hashtag, created_at):
         # добавляет заметку в таблицу Notes
-        self.session.add(Note(note_tags=hashtag, note_text=text))
+        self.session.add(
+            Note(note_tags=hashtag, note_text=text, created_at=created_at))
         self.session.commit()
 
-    def delete_note(self, hashtag):
+    def delete_note(self, id):
         # удаляет заметку из таблицы Notes, которая имеет note_tags=hashtag
         note_for_deleting = self.session.query(
-            Note).filter_by(note_tags=hashtag).first()
+            Note).filter_by(id=id).one()
         self.session.delete(note_for_deleting)
         self.session.commit()
 
-    def find_note_for_editing(self, hashtag):
-        # возвращает текст заметки с заданным тэгом
-        note_for_editing = self.session.query(
-            Note).filter_by(note_tags=hashtag).one()
-        return note_for_editing.note_text
+    def find_note_for_editing(self, id):
+        # возвращает заметку для дальнейшего редактирования
+        return self.session.query(Note).filter_by(id=id).one()
 
-    def edit_note(self, hashtag, new_text):
+    def edit_note(self, id, new_text, new_hashtag):
         # редактирует заметку из таблицы Notes, которая имеет note_tags=hashtag
         note_for_editing = self.session.query(
-            Note).filter_by(note_tags=hashtag).one()
+            Note).filter_by(id=id).one()
         note_for_editing.note_text = new_text
+        note_for_editing.note_tags = new_hashtag
         self.session.commit()
 
-    def find_note(self,  keyword):
-        # находит все заметки  из таблицы Notes, в тэгах которых содержится keyword
-        # возвращает note_list - список экземляра класса Note
-
-        note_list = self.session.query(Note).filter_by(note_tags=keyword).all()
-        return note_list
+    def find_notes(self,  keyword):
+        # находит все заметки, которые содержат keyword в тексте или тегах заметки
+        q1 = self.session.query(Note).filter(
+            Note.note_tags.like(f'%{keyword}%'))
+        q2 = self.session.query(Note).filter(
+            Note.note_text.like(f'%{keyword}%'))
+        return q1.union(q2).all()
 
     def print_notes(self, note_list):
         # где note_list - список экземляра класса Note
