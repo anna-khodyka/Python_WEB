@@ -6,9 +6,9 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-_CONNECTION_STRING = "sqlite:///hw907.db"
+# _CONNECTION_STRING = "sqlite:///hw907.db"
 # ошибка тут
-# _CONNECTION_STRING = "sqlite:///" & current_app.config["DB_NAME"] & ".db"
+_CONNECTION_STRING = "sqlite:///" & current_app.config["DB_NAME"] & ".db"
 
 engine = create_engine(_CONNECTION_STRING, echo=True)
 DBSession = sessionmaker(bind=engine)
