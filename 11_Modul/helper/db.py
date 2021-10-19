@@ -6,11 +6,13 @@ from .model import *
 
 def check_db():
     model = get_db()
-    click.echo(model.book.return_all_records())
+    click.echo('Initialized the database.')
+    # click.echo(model.book.return_all_records())  # переписать на что=то другое
 
 
 def get_db():
-    """Get database """
+    """Get database"""
+    db_name = current_app.config['DB_NAME']
     if "model" not in g:
         g.model = Model()
     return g.model
@@ -18,18 +20,18 @@ def get_db():
 
 def close_db(e=None):
     """Closes db  connection"""
-    client = g.pop('model', None)
+    client = g.pop("model", None)
     if client is not None:
         client.session.close()
 
 
-@click.command('check-db')
+@click.command("check-db")
 @with_appcontext
 def check_db_command():
     """Ge."""
-    click.echo('Start checking db ')
+    click.echo("Start checking db ")
     check_db()
-    click.echo('Finish checking db.')
+    click.echo("Finish checking db.")
 
 
 def init_app(app):

@@ -1,17 +1,27 @@
+"""Classbook module
+В данном модуле описан class AddressBook для работы с таблицей Record"""
 import re
-from datetime import datetime, timedelta, date
-from sqlalchemy import extract
-from sqlalchemy.sql.selectable import subquery
+from datetime import datetime, date
 
 from .db_classes import Record, Phone
 
 
-class AddressBook():
+class AddressBook:
+    '''класс для работы с таблицей Record'''
+
     def __init__(self, session):
         self.session = session
 
-    def add_record(self, name, birthday=None, address=None, email=None, tags=None, phones=None):
-
+    def add_record(
+        self,
+        name,
+        birthday=None,
+        address=None,
+        email=None,
+        tags=None,
+        phones=None
+    ):
+        '''добавляет запись'''
         record = Record(name=name, birthday=birthday,
                         address=address, email=email, tags=tags)
         # добавить проверку на phones <> None
@@ -20,17 +30,27 @@ class AddressBook():
 
         self.session.add(record)
         self.session.commit()
-        print('This contact adds to DB:')
+        print("This contact adds to DB:")
         print(record)
 
-    def remove_record(self, id):
-        # удаляет record с указанным id
-        record = self.session.query(Record).filter_by(id=id).one()
+    def remove_record(self, record_id):
+        ''' удаляет record с указанным id'''
+        record = self.session.query(Record).filter_by(id=record_id).one()
         self.session.delete(record)
         self.session.commit()
         return str(record)
 
-    def edit_record(self, edited_id, updated_name, updated_birthday, updated_address, updated_email, updated_tags, updated_phone):
+    def edit_record(
+        self,
+        edited_id,
+        updated_name,
+        updated_birthday,
+        updated_address,
+        updated_email,
+        updated_tags,
+        updated_phone,
+    ):
+        '''редактирует record'''
         record = self.session.query(Record).filter_by(id=edited_id).one()
         record.name = updated_name
         record.phones = []
@@ -42,163 +62,94 @@ class AddressBook():
         self.session.commit()
         return str(record)
 
-    def edit_name(self, edited_id, new_field_value):
-        record = self.session.query(Record).filter_by(id=edited_id).one()
-        record.name = new_field_value
-        self.session.commit()
-        return str(record)
-
-    def edit_phone(self, edited_id, new_field_value):
-        record = self.session.query(Record).filter_by(id=edited_id).one()
-        record.phones.append(Phone(phone_value=new_field_value))
-        self.session.commit()
-        return str(record)
-
-    def edit_birthday(self, edited_id, new_field_value):
-        new_field_value = datetime.strptime(new_field_value, "%d.%m.%Y").date()
-        record = self.session.query(Record).filter_by(id=edited_id).one()
-        record.birthday = new_field_value
-        self.session.commit()
-        return str(record)
-
-    def edit_address(self, edited_id, new_field_value):
-        record = self.session.query(Record).filter_by(id=edited_id).one()
-        record.address = new_field_value
-        self.session.commit()
-        return str(record)
-
-    def edit_email(self, edited_id, new_field_value):
-        record = self.session.query(Record).filter_by(id=edited_id).one()
-        record.email = new_field_value
-        self.session.commit()
-        return str(record)
-
-    def edit_tags(self, edited_id, new_field_value):
-        record = self.session.query(Record).filter_by(id=edited_id).one()
-        record.tags = new_field_value
-        self.session.commit()
-        return str(record)
-
     def return_all_records(self):
-        # возвращает список объектов Record
+        '''возвращает список объектов Record'''
         return self.session.query(Record).all()
 
     def find_record(self, edited_id):
+        '''находит один record'''
         return self.session.query(Record).filter_by(id=edited_id).one()
 
     def find_value(self, keyword):
-        # возвращает список объектов Record
-        q1 = self.session.query(Record).filter(
-            Record.name.like(f'%{keyword}%'))
-        q2 = self.session.query(Record).filter(
-            Record.tags.like(f'%{keyword}%'))
-        q3 = self.session.query(Record).filter(
-            Record.address.like(f'%{keyword}%'))
-        records_list = q1.union(q2, q3).all()
+        '''возвращает список объектов Record, которые содержат keyword'''
+        query1 = self.session.query(Record).filter(
+            Record.name.like(f"%{keyword}%"))
+        query2 = self.session.query(Record).filter(
+            Record.tags.like(f"%{keyword}%"))
+        query3 = self.session.query(Record).filter(
+            Record.address.like(f"%{keyword}%"))
+        records_list = query1.union(query2, query3).all()
         return records_list
 
-    def iterator(self, records_list, n):
-        # возвращает текстовое представление объекта для консольного интерфейса
-        counter = 0
-        result = ""
-        for record in records_list:
-            # записи строки с описанием 1 контакта
-            result += str(record)
-            counter += 1
-            if counter == n:
-                result = result.rstrip("\n")
-                yield result
-                result = ""
-                counter = 0
-        if result:
-            result = result.rstrip("\n")
-            yield result
-
-    def find_persons_with_birthday_in_n_days(self, n):
-        # ищет людей с др в data
-        # возвращает список объектов Record
-        if n >= 365:
-            n = n % 365
-        bdate = datetime.now().date()+timedelta(days=n)
-        b_day = bdate.day
-        b_month = bdate.month
-        # поиск
-        birthday_book = self.session.query(
-            Record).filter(extract('month', Record.birthday) == b_month, extract('day', Record.birthday) == b_day).all()
-        return bdate, birthday_book
-
-    def find_persons_with_birthday_during_n_days(self, n):
-        birthday_book = []
-        # current_date = datetime.now().date()
-        # limit_date = current_date+timedelta(days=n)
-        # print(f'Current date is {current_date}, limit date is {limit_date}')
-
-        # birthday_book = self.session.query(
-        #     Record).filter(Record.birth_this_year >= current_date, Record.birth_this_year <= limit_date).all()
-        return birthday_book
-
-    def find_persons_birthday(self, name):
-        # возвращает список кортежей (имя, дней до ДР)
-        records_list = self.find_value(name)
-        result = []
-        for record in records_list:
-            result.append(
-                (record.name, AddressBook.days_to_birthday(record.birthday)))
-        return result
-
-    @ staticmethod
+    @staticmethod
     def days_to_birthday(bday):
+        '''возвращает количество дней до ближайшего дня рождения bday'''
         today_d = datetime.now().date()
-        if bday == None:
+        if bday is None:
             return None
         bday = bday.replace(year=today_d.year)
         if today_d > bday:
-            bday = date(today_d.year+1, bday.month, bday.day)
-            days_left = (bday-today_d)
+            bday = date(today_d.year + 1, bday.month, bday.day)
+            days_left = bday - today_d
         else:
-            days_left = (bday-today_d)
+            days_left = bday - today_d
         return days_left.days
 
     def sort(self, sort_type):
+        '''сортирует records'''
         if sort_type == "1":
-            records_list = self.session.query(Record).order_by(
-                Record.name.asc()).all()
+            records_list = self.session.query(
+                Record).order_by(Record.name.asc()).all()
         elif sort_type == "2":
-            records_list = self.session.query(Record).order_by(
-                Record.name.desc()).all()
+            records_list = self.session.query(
+                Record).order_by(Record.name.desc()).all()
         elif sort_type == "3":
-            records_list = self.session.query(Record).order_by(
-                Record.id.asc()).all()
+            records_list = self.session.query(
+                Record).order_by(Record.id.asc()).all()
         elif sort_type == "4":
-            records_list = self.session.query(Record).order_by(
-                Record.id.desc()).all()
+            records_list = self.session.query(
+                Record).order_by(Record.id.desc()).all()
         return records_list
 
-    def validate_phone(self, phone):
-        return re.fullmatch('[+]?[0-9]{3,12}', phone)
+    @staticmethod
+    def validate_phone(phone):
+        '''валидирует телефон'''
+        return re.fullmatch("[+]?[0-9]{3,12}", phone)
 
-    def validate_address(self, address):
+    @staticmethod
+    def validate_address(address):
+        '''валидирует адресс'''
         return len(address) > 1 and len(address) <= 30
 
-    def validate_tags(self, tags):
+    @staticmethod
+    def validate_tags(tags):
+        '''валидирует тєги'''
         return len(tags) > 1 and len(tags) <= 15
 
-    def validate_email_format(self, email):
-        return re.match('([a-zA-Z][a-zA-Z0-9\._!#$%^*=\-]{1,}@[a-zA-Z]+\.[a-zA-Z]{2,})', email)
+    @staticmethod
+    def validate_email_format(email):
+        '''валидирует ємейл'''
+        return re.match(r"([a-zA-Z][a-zA-Z0-9\._!#$%^*=\-]{1,}@[a-zA-Z]+\.[a-zA-Z]{2,})", email)
 
-    def validate_email_duration(self, email):
-        return (len(email) > 1 and len(email) <= 30)
+    @staticmethod
+    def validate_email_duration(email):
+        '''валидирует длину ємейла'''
+        return len(email) > 1 and len(email) <= 30
 
-    def validate_birthday(self, birthday):
+    @staticmethod
+    def validate_birthday(birthday):
+        '''валидирует дату рождения'''
         try:
-            datetime.strptime(birthday, "%d.%m.%Y").date()
+            datetime.strptime(birthday, r"%d.%m.%Y").date()
             return True
-        except:
+        except ValueError:
             return False
 
-    def validate_birthday2(self, birthday):
+    @staticmethod
+    def validate_birthday2(birthday):
+        '''валидирует дату рождения'''
         try:
             datetime.strptime(birthday, "%Y-%m-%d").date()
             return True
-        except:
+        except ValueError:
             return False
