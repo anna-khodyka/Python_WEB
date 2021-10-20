@@ -40,5 +40,7 @@ def create_app(test_config=None):
 
 # инструкция по запуску приложения
 # $env:FLASK_APP = "helper"
-# $env:FLASK_APP = "helper"
+# $env:FLASK_ENV="development"
+# $env:MY_DB_NAME = "sqlite:///hw907.db"
+
 # flask run
