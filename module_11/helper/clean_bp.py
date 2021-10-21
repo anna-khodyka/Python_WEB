@@ -8,7 +8,6 @@ from flask import (
     request,
     flash,
 )
-from datetime import datetime
 import pathlib
 from werkzeug.exceptions import abort
 
@@ -30,7 +29,7 @@ def clean():
             CleanFolder().parse_folder(path)
 
         except Exception:
-            error = "Указанная папка не существует"
+            error = "Your folder is not existed"
 
         if error is not None:
             flash(error)
