@@ -81,20 +81,6 @@ class AddressBook:
         records_list = query1.union(query2, query3).all()
         return records_list
 
-    @staticmethod
-    def days_to_birthday(bday):
-        '''возвращает количество дней до ближайшего дня рождения bday'''
-        today_d = datetime.now().date()
-        if bday is None:
-            return None
-        bday = bday.replace(year=today_d.year)
-        if today_d > bday:
-            bday = date(today_d.year + 1, bday.month, bday.day)
-            days_left = bday - today_d
-        else:
-            days_left = bday - today_d
-        return days_left.days
-
     def sort(self, sort_type):
         '''сортирует records'''
         if sort_type == "1":

@@ -53,7 +53,7 @@ def app():
     os.remove(file)
 
 
-@pytest.fixture()
+@pytest.fixture(scope="module")
 def client(app):
     with app.test_client() as client:
         return client

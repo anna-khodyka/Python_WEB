@@ -106,7 +106,7 @@ def delete(record_id):
         model = get_db()
         model.book.remove_record(record_id)
     except InvalidRequestException as error:
-        abort(404, error.msg)
+        abort(400, error.msg)
     return redirect(url_for("contact.index"))
 
 

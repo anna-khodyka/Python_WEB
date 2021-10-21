@@ -1,7 +1,10 @@
+
+
 import click
 from flask import current_app, g
 from flask.cli import with_appcontext
 from .model import *
+from .db_classes import engine, session, Base
 
 
 def check_db():
@@ -12,9 +15,12 @@ def check_db():
 
 def get_db():
     """Get database"""
-    db_name = current_app.config['DB_NAME']
+
+    Base.metadata.bind = engine
+    Base.metadata.create_all(engine)
+
     if "model" not in g:
-        g.model = Model()
+        g.model = Model(session)
     return g.model
 
 

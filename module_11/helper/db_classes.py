@@ -1,4 +1,4 @@
-from flask.globals import current_app
+
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.sqltypes import Date
@@ -7,9 +7,10 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import os
 
+# _CONNECTION_STRING = "sqlite:///test.db"
 # _CONNECTION_STRING = "sqlite:///hw907.db"
 _CONNECTION_STRING = os.getenv('MY_DB_NAME')
-# _CONNECTION_STRING = "sqlite:///test.db"
+
 
 engine = create_engine(_CONNECTION_STRING, echo=True)
 DBSession = sessionmaker(bind=engine)
@@ -50,6 +51,6 @@ class Note(Base):
     note_text = Column(String)
     created_at = Column(Date)
 
-
-Base.metadata.bind = engine
-Base.metadata.create_all(engine)
+# перенесла в get_db
+# Base.metadata.bind = engine
+# Base.metadata.create_all(engine)
