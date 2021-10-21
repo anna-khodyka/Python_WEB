@@ -10,7 +10,8 @@ class NotesBook:
 
     def add_note(self, text, hashtag, created_at):
         # добавляет заметку в таблицу Notes
-        self.session.add(Note(note_tags=hashtag, note_text=text, created_at=created_at))
+        self.session.add(
+            Note(note_tags=hashtag, note_text=text, created_at=created_at))
         self.session.commit()
 
     def delete_note(self, id):
@@ -32,31 +33,11 @@ class NotesBook:
 
     def find_notes(self, keyword):
         # находит все заметки, которые содержат keyword в тексте или тегах заметки
-        q1 = self.session.query(Note).filter(Note.note_tags.like(f"%{keyword}%"))
-        q2 = self.session.query(Note).filter(Note.note_text.like(f"%{keyword}%"))
+        q1 = self.session.query(Note).filter(
+            Note.note_tags.like(f"%{keyword}%"))
+        q2 = self.session.query(Note).filter(
+            Note.note_text.like(f"%{keyword}%"))
         return q1.union(q2).all()
-
-    def print_notes(self, note_list):
-        # где note_list - список экземляра класса Note
-
-        result = ""
-
-        # Печать шапки с названием столбцов
-        result += f" {72*'_'} \n"
-        result += "|             TAGS             |                NOTE                     |\n"
-        result += f"|{71*'_'} |\n"
-        # Печать заметок
-        for note in note_list:
-            lines = note.note_text.split("\n")
-            counter = 0
-            for line in lines:
-                if counter == 0:
-                    result += f"|{note.note_tags:<30}| {line:<40}|\n"
-                else:
-                    result += f'|{" ":<30}| {line:<40}|\n'
-                counter += 1
-            result += f'|{30*"_"}|{41*"_"}|\n'
-        print(result)
 
     def sort_notes(self, search_type="1"):
         # выводит список заметков в отсортированном виде
@@ -67,9 +48,11 @@ class NotesBook:
         # возвращает Note_list
 
         if search_type == "1":
-            note_list = self.session.query(Note).order_by(Note.note_tags.asc()).all()
+            note_list = self.session.query(
+                Note).order_by(Note.note_tags.asc()).all()
         elif search_type == "2":
-            note_list = self.session.query(Note).order_by(Note.note_tags.desc()).all()
+            note_list = self.session.query(Note).order_by(
+                Note.note_tags.desc()).all()
         elif search_type == "3":
             note_list = self.session.query(Note).order_by(Note.id.asc()).all()
         elif search_type == "4":

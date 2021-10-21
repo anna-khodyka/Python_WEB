@@ -117,10 +117,10 @@ class AddressBook:
         '''валидирует ємейл'''
         return re.match(r"([a-zA-Z][a-zA-Z0-9\._!#$%^*=\-]{1,}@[a-zA-Z]+\.[a-zA-Z]{2,})", email)
 
-    @staticmethod
-    def validate_email_duration(email):
-        '''валидирует длину ємейла'''
-        return len(email) > 1 and len(email) <= 30
+    # @staticmethod
+    # def validate_email_duration(email):
+    #     '''валидирует длину ємейла'''
+    #     return len(email) > 1 and len(email) <= 30
 
     @staticmethod
     def validate_birthday(birthday):

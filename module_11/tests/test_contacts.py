@@ -37,7 +37,7 @@ def test_add_with_bad_birthday(client, app):
 
 def test_add_with_bad_email(client, app):
     response = client.post(
-        '/add', data={'name': 'Vasya', 'birthday': '01.03.1980', 'address': 'Bucha', "email": "annabigmir.net", "tags": "friends", "phone": "+380978440011"}, follow_redirects=True
+        '/add', data={'name': 'Vasya', 'birthday': '01.03.1980', 'address': 'Bucha', "email": "annanetanna.bigmir.net", "tags": "friends", "phone": "+380978440011"}, follow_redirects=True
     )
     assert response.status_code == 200
     assert b"Format is wrong. Try again in format: your_nickname@something.domen_name" in response.data
