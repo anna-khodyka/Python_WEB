@@ -1,5 +1,3 @@
-
-
 import click
 from flask import current_app, g
 from flask.cli import with_appcontext
@@ -9,7 +7,7 @@ from .db_classes import engine, session, Base
 
 def check_db():
     model = get_db()
-    click.echo('Initialized the database.')
+    click.echo("Initialized the database.")
     # click.echo(model.book.return_all_records())  # переписать на что=то другое
 
 

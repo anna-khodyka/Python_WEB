@@ -1,4 +1,3 @@
-
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.sqltypes import Date
@@ -9,7 +8,7 @@ import os
 
 # _CONNECTION_STRING = "sqlite:///test.db"
 # _CONNECTION_STRING = "sqlite:///hw907.db"
-_CONNECTION_STRING = os.getenv('MY_DB_NAME')
+_CONNECTION_STRING = os.getenv("MY_DB_NAME")
 
 
 engine = create_engine(_CONNECTION_STRING, echo=True)
@@ -50,6 +49,7 @@ class Note(Base):
     note_tags = Column(String)
     note_text = Column(String)
     created_at = Column(Date)
+
 
 # перенесла в get_db
 # Base.metadata.bind = engine

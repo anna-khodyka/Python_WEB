@@ -10,8 +10,7 @@ class NotesBook:
 
     def add_note(self, text, hashtag, created_at):
         # добавляет заметку в таблицу Notes
-        self.session.add(
-            Note(note_tags=hashtag, note_text=text, created_at=created_at))
+        self.session.add(Note(note_tags=hashtag, note_text=text, created_at=created_at))
         self.session.commit()
 
     def delete_note(self, id):
@@ -33,10 +32,8 @@ class NotesBook:
 
     def find_notes(self, keyword):
         # находит все заметки, которые содержат keyword в тексте или тегах заметки
-        q1 = self.session.query(Note).filter(
-            Note.note_tags.like(f"%{keyword}%"))
-        q2 = self.session.query(Note).filter(
-            Note.note_text.like(f"%{keyword}%"))
+        q1 = self.session.query(Note).filter(Note.note_tags.like(f"%{keyword}%"))
+        q2 = self.session.query(Note).filter(Note.note_text.like(f"%{keyword}%"))
         return q1.union(q2).all()
 
     def sort_notes(self, search_type="1"):
@@ -48,11 +45,9 @@ class NotesBook:
         # возвращает Note_list
 
         if search_type == "1":
-            note_list = self.session.query(
-                Note).order_by(Note.note_tags.asc()).all()
+            note_list = self.session.query(Note).order_by(Note.note_tags.asc()).all()
         elif search_type == "2":
-            note_list = self.session.query(Note).order_by(
-                Note.note_tags.desc()).all()
+            note_list = self.session.query(Note).order_by(Note.note_tags.desc()).all()
         elif search_type == "3":
             note_list = self.session.query(Note).order_by(Note.id.asc()).all()
         elif search_type == "4":
