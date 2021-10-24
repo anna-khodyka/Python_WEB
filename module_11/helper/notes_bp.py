@@ -1,14 +1,13 @@
+'''модуль для работы с контактами и классами Notes'''
+from datetime import datetime
 from flask import (
-    Flask,
     redirect,
     url_for,
-    g,
     Blueprint,
     render_template,
     request,
     flash,
 )
-from datetime import datetime
 from werkzeug.exceptions import abort
 
 from .db import get_db
@@ -17,6 +16,8 @@ notes_bp = Blueprint("notes", __name__, url_prefix="/notes")
 
 
 class InvalidRequestException(Exception):
+    '''класс для обработки ошибок'''
+
     def __init__(self, msg, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.msg = msg
@@ -24,6 +25,7 @@ class InvalidRequestException(Exception):
 
 @notes_bp.route("/")
 def index():
+    '''handler главной страницы с перечнем всех заметок'''
     model = get_db()
     notes_list = model.notes_book.all_notes()
     return render_template("notes/index.html", results=notes_list)
@@ -31,6 +33,7 @@ def index():
 
 @notes_bp.route("/add", methods=("GET", "POST"))
 def add():
+    '''handler для добавления заметки'''
     model = get_db()
     error = None
     if request.method == "POST":
@@ -59,16 +62,18 @@ def add():
 
 @notes_bp.route("/<note_id>/delete", methods=("POST",))
 def delete(note_id):
+    '''handler для удаления заметки'''
     try:
         model = get_db()
         model.notes_book.delete_note(note_id)
-    except InvalidRequestException as e:
-        abort(404, e.msg)
+    except InvalidRequestException as err:
+        abort(404, err.msg)
     return redirect(url_for("notes.index"))
 
 
 @notes_bp.route("/<note_id>/edit", methods=("GET", "POST"))
 def edit(note_id):
+    '''handler для редактирования заметки'''
     model = get_db()
     error = None
     note = model.notes_book.find_note_for_editing(note_id)
@@ -93,7 +98,7 @@ def edit(note_id):
             flash(error)
         else:
             model.notes_book.edit_note(
-                id=note_id, new_text=note_text, new_hashtag=note_tags
+                note_id=note_id, new_text=note_text, new_hashtag=note_tags
             )
             return redirect(url_for("notes.index"))
 
@@ -102,6 +107,7 @@ def edit(note_id):
 
 @notes_bp.route("/find", methods=("POST",))
 def find():
+    '''handler для поиска заметки'''
     model = get_db()
     notes_list = model.notes_book.find_notes(request.form["keyword"])
     return render_template("notes/index.html", results=notes_list)
@@ -109,6 +115,7 @@ def find():
 
 @notes_bp.route("/sort", methods=("POST",))
 def sort():
+    '''handler для сортировки заметок'''
     model = get_db()
     notes_list = model.notes_book.sort_notes(request.form["sort_type"])
     return render_template("notes/index.html", results=notes_list)

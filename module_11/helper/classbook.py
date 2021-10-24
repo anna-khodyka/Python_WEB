@@ -1,7 +1,7 @@
 """Classbook module
 В данном модуле описан class AddressBook для работы с таблицей Record"""
 import re
-from datetime import datetime, date
+from datetime import datetime
 
 from .db_classes import Record, Phone
 
@@ -67,22 +67,29 @@ class AddressBook:
 
     def find_value(self, keyword):
         """возвращает список объектов Record, которые содержат keyword"""
-        query1 = self.session.query(Record).filter(Record.name.like(f"%{keyword}%"))
-        query2 = self.session.query(Record).filter(Record.tags.like(f"%{keyword}%"))
-        query3 = self.session.query(Record).filter(Record.address.like(f"%{keyword}%"))
+        query1 = self.session.query(Record).filter(
+            Record.name.like(f"%{keyword}%"))
+        query2 = self.session.query(Record).filter(
+            Record.tags.like(f"%{keyword}%"))
+        query3 = self.session.query(Record).filter(
+            Record.address.like(f"%{keyword}%"))
         records_list = query1.union(query2, query3).all()
         return records_list
 
     def sort(self, sort_type):
         """сортирует records"""
         if sort_type == "1":
-            records_list = self.session.query(Record).order_by(Record.name.asc()).all()
+            records_list = self.session.query(
+                Record).order_by(Record.name.asc()).all()
         elif sort_type == "2":
-            records_list = self.session.query(Record).order_by(Record.name.desc()).all()
+            records_list = self.session.query(
+                Record).order_by(Record.name.desc()).all()
         elif sort_type == "3":
-            records_list = self.session.query(Record).order_by(Record.id.asc()).all()
+            records_list = self.session.query(
+                Record).order_by(Record.id.asc()).all()
         elif sort_type == "4":
-            records_list = self.session.query(Record).order_by(Record.id.desc()).all()
+            records_list = self.session.query(
+                Record).order_by(Record.id.desc()).all()
         return records_list
 
     @staticmethod

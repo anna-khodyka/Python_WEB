@@ -1,15 +1,11 @@
+'''модуль инструмента по разбору хлама в папке, сортировке файлов по типам - Cleaner'''
+import pathlib
 from flask import (
-    Flask,
-    redirect,
-    url_for,
-    g,
     Blueprint,
     render_template,
     request,
     flash,
 )
-import pathlib
-from werkzeug.exceptions import abort
 
 from .clean import CleanFolder
 
@@ -18,7 +14,7 @@ clean_bp = Blueprint("clean", __name__, url_prefix="/clean")
 
 @clean_bp.route("/", methods=("GET", "POST"))
 def clean():
-
+    '''handler инструмента по разбору хлама в папке, сортировке файлов по типам - Cleaner'''
     error = None
     message = ""
 
@@ -28,8 +24,8 @@ def clean():
             path = pathlib.Path(user_input)
             CleanFolder().parse_folder(path)
 
-        except Exception:
-            error = "Your folder is not existed"
+        except ValueError as err:
+            error = err
 
         if error is not None:
             flash(error)

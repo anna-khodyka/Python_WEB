@@ -1,10 +1,11 @@
+'''описывает струкруктуру БД '''
+import os
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.sqltypes import Date
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-import os
 
 # _CONNECTION_STRING = "sqlite:///test.db"
 # _CONNECTION_STRING = "sqlite:///hw907.db"
@@ -18,6 +19,7 @@ Base = declarative_base()
 
 
 class Record(Base):
+    '''описывает таблицу Record для хранения контактов'''
     __tablename__ = "records"
 
     id = Column(Integer, primary_key=True)
@@ -33,6 +35,7 @@ class Record(Base):
 
 
 class Phone(Base):
+    '''описывает таблицу Phone для хранения телефонов'''
     __tablename__ = "phones"
 
     id = Column(Integer, primary_key=True)
@@ -43,6 +46,7 @@ class Phone(Base):
 
 
 class Note(Base):
+    '''описывает таблицу notes для хранения заметок'''
     __tablename__ = "notes"
 
     id = Column(Integer, primary_key=True)

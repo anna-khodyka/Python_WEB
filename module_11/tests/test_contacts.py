@@ -122,7 +122,7 @@ def test_add_with_bad_tags(client, app):
         follow_redirects=True,
     )
     assert response.status_code == 200
-    assert b"Please no more than 15 symbols" in response.data
+    assert b"no more 15 symbols" in response.data
 
 
 def test_add_with_bad_phone(client, app):
@@ -139,7 +139,7 @@ def test_add_with_bad_phone(client, app):
         follow_redirects=True,
     )
     assert response.status_code == 200
-    assert b"Phone may start with + and has from 3 to 12 digits max" in response.data
+    assert b"Phone must contain 3-12 digits" in response.data
 
 
 def test_find(client, app):
@@ -153,7 +153,8 @@ def test_find(client, app):
 
 def test_sort(client, app):
     for i in "1234":
-        response = client.post("/sort", data={"sort_type": i}, follow_redirects=True)
+        response = client.post(
+            "/sort", data={"sort_type": i}, follow_redirects=True)
         assert response.status_code == 200
         assert b"test address" in response.data
 
@@ -276,7 +277,7 @@ def test_edit_with_bad_tags(client, app):
         follow_redirects=True,
     )
     assert response.status_code == 200
-    assert b"Please no more than 15 symbols" in response.data
+    assert b"no more 15 symbols" in response.data
 
 
 def test_edit_with_bad_phone(client, app):
@@ -293,4 +294,4 @@ def test_edit_with_bad_phone(client, app):
         follow_redirects=True,
     )
     assert response.status_code == 200
-    assert b"Phone may start with + and has from 3 to 12 digits max" in response.data
+    assert b"Phone must contain 3-12 digits" in response.data

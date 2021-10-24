@@ -1,12 +1,14 @@
+'''предоставляет и закрывает доступ приложению к БД'''
 import click
-from flask import current_app, g
+from flask import g
 from flask.cli import with_appcontext
-from .model import *
+from .model import Model
 from .db_classes import engine, session, Base
 
 
 def check_db():
-    model = get_db()
+    '''проверяет есть ли доступ к БД'''
+    get_db()
     click.echo("Initialized the database.")
     # click.echo(model.book.return_all_records())  # переписать на что=то другое
 
@@ -22,8 +24,9 @@ def get_db():
     return g.model
 
 
-def close_db(e=None):
+def close_db(err=None):
     """Closes db  connection"""
+    print(err)
     client = g.pop("model", None)
     if client is not None:
         client.session.close()
@@ -39,5 +42,6 @@ def check_db_command():
 
 
 def init_app(app):
+    '''init and teardown the application'''
     app.cli.add_command(check_db_command)
     app.teardown_appcontext(close_db)

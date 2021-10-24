@@ -17,7 +17,8 @@ def create_app(test_config=None):
     if test_config is None:
         # load the instance config, if it exists, when not testing
         # DO not do this on prod
-        app.config.from_pyfile(os.path.join(directory_path, "config.py"), silent=True)
+        app.config.from_pyfile(os.path.join(
+            directory_path, "config.py"), silent=True)
     else:
         # load the test config if passed in
         app.config.from_mapping(test_config)
